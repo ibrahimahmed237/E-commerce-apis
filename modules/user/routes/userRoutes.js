@@ -1,7 +1,14 @@
 import express from "express";
-import userController from "../controllers/userController";
+import {signupController,loginController} from "../controllers/userCtr.js";
+import {
+  signupValidation,
+  loginValidation,
+} from "../validators/userValidation.js";
+import validator from "../../../validation/commonValidation.js";
 
 const router = express.Router();
 
-router.route("/signup").post(userController.signup);
-router.route("/login").get(userController.login);
+router.post("/signup", validator(signupValidation), signupController);
+router.get("/login", validator(loginValidation), loginController);
+
+export default router;

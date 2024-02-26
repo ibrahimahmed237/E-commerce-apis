@@ -1,17 +1,13 @@
-import { Schema } from "mongoose";
+import mongoose from "mongoose";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-const userSchema = new Schema({
+const userSchema = new mongoose.Schema({
   firstName: {
     type: String,
     required: true,
   },
   lastName: {
-    type: String,
-    required: true,
-  },
-  username: {
     type: String,
     required: true,
   },
@@ -24,7 +20,8 @@ const userSchema = new Schema({
     required: true,
   },
   role: {
-    type: { enum: ["admin", "user", "superAdmin", "seller"] },
+    type: String,
+    enum: ["admin", "user", "superAdmin", "seller"] ,
     default: "user",
   },
   address: {
@@ -57,7 +54,7 @@ userSchema.methods.toJSON = function () {
 
 userSchema.pre("save", async function (next) {
   if (this.isModified("password")) {
-    this.password = await bcryptjs.hash(user.password, 8);
+    this.password = await bcryptjs.hash(this.password, 8);
   }
   next();
 });
@@ -73,4 +70,4 @@ userSchema.methods.generateAuthToken = async function () {
   return token;
 };
 
-module.exports = mongoose.model("User", userSchema);
+export default mongoose.model("User", userSchema);
