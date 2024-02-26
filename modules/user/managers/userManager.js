@@ -1,7 +1,6 @@
 import User from "../models/User.js";
 import asyncHandler from "express-async-handler";
 import  appError  from "../../../utils/appError.js";
-import e from "express";
 
 const getUser = asyncHandler(async function (email, id) {
   if (id) return await User.findById(id);
@@ -26,4 +25,5 @@ const createUser = asyncHandler(async function (
   });
   return user;
 });
+
  export { getUser, createUser };

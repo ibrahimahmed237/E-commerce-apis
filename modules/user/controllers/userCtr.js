@@ -17,13 +17,22 @@ const signupController = asyncHandler(async function (req, res, next) {
     address,
     phoneNumber
   );
+
   if (!newUser) return next(new appError("User not created", 400));
   res.status(201).json({ status: "success" });
 });
 
 const loginController = asyncHandler(async function (req, res, next) {
-  // Extract the username and password from the request body
-  const { username, password } = req.body;
+  const { email, password } = req.body;
+
+  const user = await getUser(email);
+  if (!user) return next(new appError("User does not exist", 400));
+
+  const isMatch = await user.comparePassword(password);
+  if (!isMatch) return next(new appError("Invalid credentials", 400));
+  
+  const token = await user.generateAuthToken();
+  res.status(200).json({ status: "success", token });
 });
 
-export { signupController, loginController};
+export { signupController, loginController };

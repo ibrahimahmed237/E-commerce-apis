@@ -26,7 +26,7 @@ const signupValidation = async (user) => {
         .trim()
         .messages({ "string.pattern.base": "Name must be letters only" }),
       phoneNumber: joi.string().min(11).trim(),
-      address: joi.string().min(5).max(100).trim(),
+      address: joi.string().min(3).max(100).trim(),
     })
     .unknown();
   let { error, value } = userSchema.validate(user);
@@ -37,8 +37,7 @@ const signupValidation = async (user) => {
 const loginValidation = async (user) => {
   const userSchema = joi
     .object({
-      email: joi.string().email().min(5).max(50).trim(),
-      username: joi.string().min(6).max(25).trim(),
+      email: joi.string().email().min(5).max(50).trim().required(),
       password: joi.string().min(8).max(50).required().trim(),
     })
     .unknown();

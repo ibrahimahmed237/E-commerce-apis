@@ -21,7 +21,7 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ["admin", "user", "superAdmin", "seller"] ,
+    enum: ["admin", "user", "superAdmin", "seller"],
     default: "user",
   },
   address: {
@@ -68,6 +68,13 @@ userSchema.methods.generateAuthToken = async function () {
   user.tokens = user.tokens.concat({ token });
   await user.save();
   return token;
+};
+
+userSchema.methods.comparePassword = async function(password){
+  const user = this;
+  const isMatch = await bcryptjs.compare(password, user.password);
+  if (!isMatch) return false;
+  return true;
 };
 
 export default mongoose.model("User", userSchema);
