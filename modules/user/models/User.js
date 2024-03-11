@@ -47,6 +47,16 @@ const userSchema = new mongoose.Schema({
   avatar: {
     type: String,
   },
+  otp: { type: Number },
+  passwordOtp: {
+    otp: { type: Number, default: null },
+    isVerified: { type: Boolean, default: false },
+  },
+  counter: { type: Number, default: 0 },
+  isVerified: {
+    type: Boolean,
+    default: false,
+  },
   tokens: [
     {
       token: {

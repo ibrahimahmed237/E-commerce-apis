@@ -1,6 +1,6 @@
 import jsonwebtoken from "jsonwebtoken";
-import appError from "../utils/appError";
-import User from "../modules/user/models/User";
+import appError from "../utils/appError.js";
+import User from "../modules/user/models/User.js";
 import asyncHandler from "express-async-handler";
 
 export default asyncHandler(async function (req, res, next) {
