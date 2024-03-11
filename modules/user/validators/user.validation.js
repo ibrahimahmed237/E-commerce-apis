@@ -1,5 +1,5 @@
 import joi from "joi";
-import errorMessages from "./errorMessages.js";
+import errorMessages from "../../../validation/error.messages.js";
 
 const signupValidation = async (user) => {
   const userSchema = joi

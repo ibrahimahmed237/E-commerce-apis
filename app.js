@@ -1,12 +1,12 @@
-import express from "express";
+import {app} from "./socket/socket.js";
+import express from "express"
 import { errorHandler, notFound } from "./middlewares/errorHandler.js";
 import connectDB from "./config/db.js";
 import { config } from "dotenv";
 import cors from "cors";
 import helmet from "helmet";
-import userRoutes from "./modules/user/routes/userRoutes.js";
+import userRoutes from "./modules/user/routes/user.route.js";
 
-const app = express();
 
 config();
 connectDB();
@@ -21,11 +21,11 @@ app.get("/", (req, res, next) => {
   res.send("Hello Form API");
 });
 
-app.use("/api/v1/users", userRoutes);
+app.use("/api/users", userRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
 
-app.listen(process.env.PORT || 8080, () => {
-  console.log(`Server is running on port ${process.env.PORT || 8080}`);
+app.listen(process.env.PORT || 5000, () => {
+  console.log(`Server is running on port ${process.env.PORT || 5000}`);
 });

@@ -11,6 +11,9 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  fullName: {
+    type: String,
+  },
   email: {
     type: String,
     required: true,
@@ -24,9 +27,19 @@ const userSchema = new mongoose.Schema({
     enum: ["admin", "user", "superAdmin", "seller"],
     default: "user",
   },
-  address: {
-    type: String,
-    required: true,
+  location: {
+    city: {
+      type: String,
+    },
+    state: {
+      type: String,
+    },
+    country: {
+      type: String,
+    },
+    address: {
+      type: String,
+    },
   },
   phoneNumber: {
     type: String,
@@ -61,16 +74,13 @@ userSchema.pre("save", async function (next) {
 
 userSchema.methods.generateAuthToken = async function () {
   const user = this;
-  const token = jwt.sign(
-    { _id: user._id.toString(), role: user.role },
-    process.env.JWT_SECRET
-  );
+  const token = jwt.sign({ _id: user._id.toString() }, process.env.JWT_SECRET);
   user.tokens = user.tokens.concat({ token });
   await user.save();
   return token;
 };
 
-userSchema.methods.comparePassword = async function(password){
+userSchema.methods.comparePassword = async function (password) {
   const user = this;
   const isMatch = await bcryptjs.compare(password, user.password);
   if (!isMatch) return false;
