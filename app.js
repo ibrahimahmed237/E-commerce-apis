@@ -6,7 +6,7 @@ import { config } from "dotenv";
 import cors from "cors";
 import helmet from "helmet";
 import userRoutes from "./modules/user/routes/user.route.js";
-import authRoutes from "./modules/auth/routes/auth.route.js";
+import authRoutes from "./modules/authentication/routes/auth.route.js";
 
 config();
 connectDB();
