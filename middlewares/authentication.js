@@ -4,7 +4,7 @@ import User from "../modules/user/models/User.js";
 import asyncHandler from "express-async-handler";
 
 export default asyncHandler(async function (req, res, next) {
-  if (!req.req.header("Authorization"))
+  if (!req.header("Authorization"))
     return next(new Error("Unauthorized", 401));
 
   const token = req.header("Authorization").replace("Bearer ", "");

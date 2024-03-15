@@ -6,7 +6,7 @@ import { config } from "dotenv";
 import cors from "cors";
 import helmet from "helmet";
 import userRoutes from "./modules/user/routes/user.route.js";
-
+import authRoutes from "./modules/auth/routes/auth.route.js";
 
 config();
 connectDB();
@@ -21,7 +21,8 @@ app.get("/", (req, res, next) => {
   res.send("Hello Form API");
 });
 
-app.use("/api/users", userRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/user", userRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

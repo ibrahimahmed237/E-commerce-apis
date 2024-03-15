@@ -2,29 +2,10 @@ import User from "../models/User.js";
 import asyncHandler from "express-async-handler";
 import appError from "../../../utils/appError.js";
 import axios from "axios";
-import { resetPasswordValidation } from "../validators/user.validation.js";
-import { otpSending, resetPassEmail } from "../services/email.js";
+import { resetPassEmail } from "../services/email.js";
 const getUser = asyncHandler(async function (email, id) {
   if (id) return await User.findById(id);
   return await User.findOne({ email });
-});
-
-const createUser = asyncHandler(async function (user, next) {
-  user.fullName = `${user.firstName} ${user.lastName}`;
-
-  user = new User(user);
-  await user.save();
-  if (!user) return next(new appError("User not created", 400));
-
-  if (process.env.NODE_ENV !== "development") {
-    const result = await otpSending(user, next);
-    if (result === "error" || !result) {
-      return next(new appError("Email not sent", 500));
-    }
-  } else user.isVerified = true;
-  await user.save();
-
-  return user;
 });
 
 const getLocationManager = asyncHandler(async (lat, lon, next) => {
@@ -52,25 +33,20 @@ const updateUser = asyncHandler(async function (id, data) {
 
 const changePasswordManager = asyncHandler(async (req, res, next) => {
   const user = req.user;
-  
+  const { newPassword } = req.body;
+
   const isPassMatch = await user.passwordMatch(req.body.oldPassword);
   if (!isPassMatch)
     return next(
       new appError("Old password is Invalid , please try again", 400)
     );
 
-  if (req.body.oldPassword === req.body.newPassword)
+  if (req.body.oldPassword === newPassword)
     return next(
       new appError("New password can't be the same as old password", 400)
     );
 
-  req.body.password = req.body.newPassword;
-  const { value, error } = resetPasswordValidation(req.body);
-  if (error) return next(new appError(error, 400));
-
-  const { password } = value;
-
-  user.password = password;
+  user.password = newPassword;
   await user.save();
 
   return res.status(200).json({
@@ -79,10 +55,4 @@ const changePasswordManager = asyncHandler(async (req, res, next) => {
   });
 });
 
-export {
-  getUser,
-  createUser,
-  getLocationManager,
-  updateUser,
-  changePasswordManager,
-};
+export { getUser, getLocationManager, updateUser, changePasswordManager };
