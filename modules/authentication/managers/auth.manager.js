@@ -1,14 +1,24 @@
 import User from "../../user/models/User.js";
+import mongoose from "mongoose";
 import asyncHandler from "express-async-handler";
 import appError from "../../../utils/appError.js";
 import { otpSending } from "../services/email.js";
 
-const getUser = asyncHandler(async function (email, id) {
-  if (id) return await User.findById(id);
-  return await User.findOne({ email });
+export const getUser = asyncHandler(async function (input) {
+    let query = [{ email: input }];
+
+    if (mongoose.Types.ObjectId.isValid(input)) {
+      query.push({ _id: input });
+    }
+
+    let user = await User.findOne({
+      $or: query,
+    });
+
+    return user;
 });
 
-const createUser = asyncHandler(async function (user, next) {
+export const createUser = asyncHandler(async function (user, next) {
   user.fullName = `${user.firstName} ${user.lastName}`;
 
   user = new User(user);
@@ -25,9 +35,3 @@ const createUser = asyncHandler(async function (user, next) {
 
   return user;
 });
-
-
-export {
-  getUser,
-  createUser,
-};

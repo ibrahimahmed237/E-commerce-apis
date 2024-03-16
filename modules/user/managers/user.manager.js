@@ -2,13 +2,11 @@ import User from "../models/User.js";
 import asyncHandler from "express-async-handler";
 import appError from "../../../utils/appError.js";
 import axios from "axios";
+import { getUser as get_user } from "../../authentication/managers/auth.manager.js";
 import { resetPassEmail } from "../services/email.js";
-const getUser = asyncHandler(async function (email, id) {
-  if (id) return await User.findById(id);
-  return await User.findOne({ email });
-});
+export const getUser = get_user;
 
-const getLocationManager = asyncHandler(async (lat, lon, next) => {
+export const getLocationManager = asyncHandler(async (lat, lon, next) => {
   const url = `https://geocode.maps.co/reverse?lat=${lat}&lon=${lon}&api_key=658c70e9df33d292789867vrca19035`;
 
   const response = await axios.get(url);
@@ -26,12 +24,12 @@ const getLocationManager = asyncHandler(async (lat, lon, next) => {
   return location;
 });
 
-const updateUser = asyncHandler(async function (id, data) {
+export const updateUser = asyncHandler(async function (id, data) {
   const user = await User.findByIdAndUpdate(id, data);
   return user;
 });
 
-const changePasswordManager = asyncHandler(async (req, res, next) => {
+export const changePasswordManager = asyncHandler(async (req, res, next) => {
   const user = req.user;
   const { newPassword } = req.body;
 
@@ -54,5 +52,3 @@ const changePasswordManager = asyncHandler(async (req, res, next) => {
     message: "Password has been changed",
   });
 });
-
-export { getUser, getLocationManager, updateUser, changePasswordManager };

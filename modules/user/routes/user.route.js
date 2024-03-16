@@ -13,7 +13,7 @@ const router = Router();
 
 router.use(authentication);
 
-router.get("/location", getLocation);
+router.post("/location", getLocation);
 router.post("/upload-avatar", uploadSingle, uploadAvatar);
 router.patch(
   "/change-password",

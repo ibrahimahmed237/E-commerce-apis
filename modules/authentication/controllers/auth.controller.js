@@ -6,7 +6,7 @@ import appError from "../../../utils/appError.js";
 import asyncHandler from "express-async-handler";
 import { otpSending } from "../services/email.js";
 
-const signup = asyncHandler(async function (req, res, next) {
+export const signup = asyncHandler(async function (req, res, next) {
   const { firstName, lastName, email, password, phoneNumber } = req.body;
 
   let user = await getUser(email);
@@ -24,9 +24,8 @@ const signup = asyncHandler(async function (req, res, next) {
   res.status(201).json({ status: "success", token });
 });
 
-const verifyEmail = asyncHandler(async (req, res, next) => {
+export const verifyEmail = asyncHandler(async (req, res, next) => {
   let user = await getUser(req.user._id);
-
   if (user.isVerified)
     return next(new appError("You have already verified your email", 400));
 
@@ -46,7 +45,7 @@ const verifyEmail = asyncHandler(async (req, res, next) => {
   });
 });
 
-const resendCode = asyncHandler(async (req, res, next) => {
+export const resendCode = asyncHandler(async (req, res, next) => {
   let user = await getUser(req.user._id);
 
   if (user.isVerified)
@@ -74,7 +73,7 @@ const resendCode = asyncHandler(async (req, res, next) => {
   });
 });
 
-const login = asyncHandler(async function (req, res, next) {
+export const login = asyncHandler(async function (req, res, next) {
   const { email, password } = req.body;
 
   const user = await getUser(email);
@@ -87,16 +86,10 @@ const login = asyncHandler(async function (req, res, next) {
   res.status(200).json({ status: "success", token });
 });
 
-const logout = asyncHandler(async function (req, res, next) {
-  req.user.tokens = req.user.tokens.filter((token) => token.token !== req.token);
+export const logout = asyncHandler(async function (req, res, next) {
+  req.user.tokens = req.user.tokens.filter(
+    (token) => token.token !== req.token
+  );
   await req.user.save();
   res.status(200).json({ status: "success", message: "Logged out" });
 });
-
-export {
-  signup,
-  verifyEmail,
-  resendCode,
-  login,
-  logout,
-};

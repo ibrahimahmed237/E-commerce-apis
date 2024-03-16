@@ -20,8 +20,8 @@ router.post("/login", validator(loginValidation), login);
 
 
 router.use(authentication);
-router.get("/verify-email", verifyEmail);
-router.get("/resend-code", resendCode);
+router.post("/verify-email", verifyEmail);
+router.post("/resend-code", resendCode);
 
 router.get("/logout", logout);
 

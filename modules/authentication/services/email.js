@@ -31,7 +31,7 @@ const sendEmail = asyncHandler(async (to, subject, html, next) => {
   return msg;
 });
 
-const otpSending = asyncHandler(async (user, next) => {
+export const otpSending = asyncHandler(async (user, next) => {
   const Otp = generateOtp();
   user.otp = Otp;
   await user.save();
@@ -57,5 +57,3 @@ const otpSending = asyncHandler(async (user, next) => {
   }
   return result;
 });
-
-export { otpSending };

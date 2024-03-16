@@ -1,7 +1,7 @@
 import joi from "joi";
 import errorMessages from "../../../validation/error.messages.js";
 
-const resetPasswordValidation = async function (user) {
+export const resetPasswordValidation = async function (user) {
   const userSchema = joi
     .object({
       newPassword: joi.string().min(8).required().max(50).trim(),
@@ -14,5 +14,3 @@ const resetPasswordValidation = async function (user) {
   if (error) error = errorMessages(error);
   return { value, error };
 };
-
-export { resetPasswordValidation };

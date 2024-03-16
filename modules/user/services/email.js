@@ -31,7 +31,7 @@ const sendEmail = asyncHandler(async (to, subject, html, next) => {
   return msg;
 });
 
-const resetPassEmail = asyncHandler(async (user, next) => {
+export const resetPassEmail = asyncHandler(async (user, next) => {
   const Otp = generateOtp();
   user.passwordOtp.otp = Otp;
   await user.save();
@@ -57,5 +57,3 @@ const resetPassEmail = asyncHandler(async (user, next) => {
   }
   return result;
 });
-
-export { resetPassEmail };

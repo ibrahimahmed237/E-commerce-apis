@@ -1,7 +1,7 @@
 import joi from "joi";
 import errorMessages from "../../../validation/error.messages.js";
 
-const signupValidation = async (user) => {
+export const signupValidation = async (user) => {
   const userSchema = joi
     .object({
       email: joi.string().email().min(5).max(50).trim().required(),
@@ -37,7 +37,7 @@ const signupValidation = async (user) => {
   return { value, error };
 };
 
-const loginValidation = async (user) => {
+export const loginValidation = async (user) => {
   const userSchema = joi
     .object({
       email: joi.string().email().min(5).max(50).trim().required(),
@@ -48,6 +48,3 @@ const loginValidation = async (user) => {
   if (error) error = errorMessages(error);
   return { value, error };
 };
-
-
-export { loginValidation, signupValidation};
