@@ -19,6 +19,8 @@ export const signup = asyncHandler(async function (req, res, next) {
     phoneNumber,
   };
   const newUser = await createUser(user, next);
+  if (!newUser) return next(new appError("User not created", 500));
+  
   const token = await newUser.generateAuthToken();
 
   res.status(201).json({ status: "success", token });

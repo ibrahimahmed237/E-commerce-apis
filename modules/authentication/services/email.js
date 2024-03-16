@@ -1,35 +1,6 @@
 import appError from "../../../utils/appError.js";
 import asyncHandler from "express-async-handler";
-import dotenv from "dotenv";
-import nodemailer from "nodemailer";
-
-dotenv.config();
-
-const config = {
-  service: "gmail",
-  auth: {
-    user: process.env.EMAIL,
-    pass: process.env.EMAIL_PASS,
-  },
-};
-
-const generateOtp = () => {
-  const otp = Math.floor(100000 + Math.random() * 900000);
-  return otp;
-};
-
-const sendEmail = asyncHandler(async (to, subject, html, next) => {
-  const transporter = nodemailer.createTransport(config);
-  const msg = await transporter.sendMail({
-    from: "E-commerce@gmail.com",
-    to,
-    subject,
-    html,
-  });
-  if (msg.accepted.length === 0) return "error";
-
-  return msg;
-});
+import { generateOtp, sendEmail } from "../../common/services/email.js";
 
 export const otpSending = asyncHandler(async (user, next) => {
   const Otp = generateOtp();
@@ -51,7 +22,7 @@ export const otpSending = asyncHandler(async (user, next) => {
         </div>
     </div>`;
   let result = await sendEmail(user.email, "Verify your email", html, next);
-  if (result === "error") {
+  if (!result) {
     await user.deleteOne();
     return new appError("Error in sending email", 500);
   }

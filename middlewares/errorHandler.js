@@ -1,6 +1,6 @@
-import  appError  from "../utils/appError.js";
+import appError from "../utils/appError.js";
 const devErrorHandler = (res, error) => {
-  console.log("Error ", error);
+  console.log("Error", error);
   res.status(error.statusCode).json({
     status: error.status,
     message: error.message,
@@ -21,7 +21,6 @@ const prodErrorHandler = (res, error) => {
     res.status(500).json({
       status: "error",
       message: "something went wrong!",
-      error: error,
       statusCode: error.statusCode,
     });
   }

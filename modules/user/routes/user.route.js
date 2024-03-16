@@ -3,6 +3,9 @@ import {
   getLocation,
   uploadAvatar,
   changePassword,
+  resetPassword,
+  forgotPassword,
+  verifyPassOtp,
 } from "../controllers/user.controller.js";
 import { resetPasswordValidation } from "../validators/user.validation.js";
 import validator from "../../../validation/common.validation.js";
@@ -11,6 +14,14 @@ import { uploadSingle } from "../../../utils/multer.js";
 
 const router = Router();
 
+
+router.post("/forgot-password/:email?", forgotPassword);
+router.post("/verify-pass-otp/:email", verifyPassOtp);
+router.patch(
+  "/reset-password/:email",
+  validator(resetPasswordValidation),
+  resetPassword
+);
 router.use(authentication);
 
 router.post("/location", getLocation);

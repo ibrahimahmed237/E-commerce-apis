@@ -2,6 +2,9 @@ import {
   getUser,
   getLocationManager,
   changePasswordManager,
+  forgotPasswordManager,
+  resetPasswordManager,
+  verifyPassOtpManager,
 } from "../managers/user.manager.js";
 import appError from "../../../utils/appError.js";
 import asyncHandler from "express-async-handler";
@@ -39,3 +42,44 @@ export const uploadAvatar = asyncHandler(async function (req, res, next) {
 });
 
 export const changePassword = changePasswordManager;
+
+export const forgotPassword = asyncHandler(async (req, res, next) => {
+  let email = req.body.email || req.params.email;
+  email = email.toLowerCase().trim();
+
+  let result = await forgotPasswordManager(email, next);
+
+  if (result !== email)
+    return next(new appError("Process didn't succeed", 404));
+
+  return res.status(200).json({
+    status: "success",
+    message: "Verification code has been sent",
+    email,
+  });
+});
+
+export const verifyPassOtp = asyncHandler(async (req, res, next) => {
+  const email = req.params.email.toLowerCase().trim();
+
+  const isVerified = await verifyPassOtpManager(email, req.body.otp, next);
+  if (!isVerified) return next(new appError("Invalid OTP", 400));
+
+  return res.status(200).json({
+    status: "success",
+    message: "Verification succeed.",
+  });
+});
+
+export const resetPassword = asyncHandler(async (req, res, next) => {
+  const email = req.params.email.toLowerCase().trim();
+  let { newPassword } = req.body;
+
+  const user = await resetPasswordManager(email, newPassword, next);
+  if (!user) return next(new appError("An error has occured.", 404));
+
+  return res.status(200).json({
+    status: "success",
+    message: "Password has been reset",
+  });
+});

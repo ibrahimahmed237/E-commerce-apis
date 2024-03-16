@@ -5,7 +5,7 @@ export const resetPasswordValidation = async function (user) {
   const userSchema = joi
     .object({
       newPassword: joi.string().min(8).required().max(50).trim(),
-      confirmPass: joi.valid(joi.ref("password")).messages({
+      confirmPass: joi.valid(joi.ref("newPassword")).messages({
         "any.only": "Passwords do not match",
       }),
     })

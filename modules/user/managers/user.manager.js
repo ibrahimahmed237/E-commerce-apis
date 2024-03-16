@@ -52,3 +52,66 @@ export const changePasswordManager = asyncHandler(async (req, res, next) => {
     message: "Password has been changed",
   });
 });
+
+export const forgotPasswordManager = asyncHandler(async (email, next) => {
+  if (!email) return next(new appError("Please provide an email", 400));
+  let user = await get_user(email);
+  if (!user) return next(new appError("Check your Email.", 404));
+
+  user.counter++;
+
+  if (user.counter > 5) {
+    setTimeout(() => {
+      user.counter = 0;
+      user.save();
+    }, 10 * 60 * 1000);
+    return next(
+      new appError(
+        "You have exceeded the maximum number of attempts, try again later",
+        400
+      )
+    );
+  }
+
+  await resetPassEmail(user, next);
+  return email;
+});
+
+export const verifyPassOtpManager = asyncHandler(async (email, otp, next) => {
+  if (!email) return next(new appError("Please provide an email", 400));
+  let user = await get_user(email);
+  if (!user) return next(new appError("User not found", 404));
+
+  otp = Number(otp);
+  if (user.passwordOtp.otp !== otp)
+    return next(new appError("Otp is not correct.", 400));
+
+  user.passwordOtp.isVerified = true;
+  await user.save();
+  return user.passwordOtp.isVerified;
+});
+
+export const resetPasswordManager = asyncHandler(
+  async (email, password, next) => {
+    let user = await get_user(email);
+
+    if (!user) return next(new appError("User not found", 404));
+
+    if (!user.passwordOtp.isVerified)
+      return next(new appError("Please verify reset Password.", 400));
+
+    const isPassMatch = await user.comparePassword(password);
+    if (isPassMatch)
+      return next(
+        new appError("New password can't be the same as old password", 400)
+      );
+
+    user.password = password;
+    user.passwordOtp.isVerified = false;
+    user.passwordOtp.otp = null;
+    user.counter = 0;
+
+    await user.save();
+    return user;
+  }
+);
