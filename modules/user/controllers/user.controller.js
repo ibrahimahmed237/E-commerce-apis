@@ -22,16 +22,20 @@ export const uploadAvatar = asyncHandler(async function (req, res, next) {
   if (!req.file) return next(new appError("Please upload a file", 400));
   const user = await getUser(req.user._id);
 
-  if (user.avatar) {
-    const public_id = user.avatar.split("/").pop().split(".")[0];
+  if (user.avatar.public_id) {
+    let public_id = user.avatar.public_id;
     await cloudinary.uploader.destroy(public_id);
   }
-  const result = await cloudinary.uploader.upload(req.file.path);
+  const result = await cloudinary.uploader.upload(req.file.path, {
+    folder: "avatar",
+    resource_type: "image",
+  });
   if (!result) return next(new appError("Image not uploaded", 400));
 
-  user.avatar = result.secure_url;
+  user.avatar.url = result.secure_url;
+  user.avatar.public_id = result.public_id;
   await user.save();
-  res.status(200).json({ status: "success", avatar: result.secure_url });
+  res.status(200).json({ status: "success", avatar: user.avatar.url });
 });
 
 export const changePassword = changePasswordManager;
