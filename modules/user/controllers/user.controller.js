@@ -16,6 +16,9 @@ export const getLocation = asyncHandler(async function (req, res, next) {
 
   const location = await getLocationManager(latitude, longitude, next);
   user.location = location;
+  user.location.longitude = longitude;
+  user.location.latitude = latitude;
+  
   await user.save();
 
   res.status(200).json({ status: "success", location });

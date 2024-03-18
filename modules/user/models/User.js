@@ -24,8 +24,8 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ["admin", "user", "superAdmin", "seller"],
-    default: "user",
+    enum: ["admin", "customer", "superAdmin", "seller"],
+    default: "customer",
   },
   location: {
     city: {
@@ -39,6 +39,12 @@ const userSchema = new mongoose.Schema({
     },
     address: {
       type: String,
+    },
+    longitude: {
+      type: Number,
+    },
+    latitude: {
+      type: Number,
     },
   },
   phoneNumber: {
