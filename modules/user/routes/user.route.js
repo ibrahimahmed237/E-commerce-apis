@@ -32,4 +32,11 @@ router.patch(
   changePassword
 );
 
+router.get("/:userId", )
+router.patch("/:userId", )
+
+// Admin
+router.get("/", )
+router.delete("/:userId");
+
 export default router;

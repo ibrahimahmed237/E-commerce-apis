@@ -22,13 +22,7 @@ const orderSchema = new mongoose.Schema(
     ],
     orderStatus: {
       type: String,
-      enum: [
-        "Order Placed",
-        "Processing",
-        "Shipped",
-        "Delivered",
-        "Cancelled",
-      ],
+      enum: ["placed", "Processing", "Shipped", "Delivered", "Cancelled"],
     },
     payment: {
       status: {
