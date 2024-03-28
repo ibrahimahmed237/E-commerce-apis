@@ -5,10 +5,10 @@ const rbac = new RBAC({
   permissions: {
     order: ["create", "read", "update"], // Order-related permissions
     product: ["create", "read", "update", "delete"], // Product-related permissions
-    store: ["create", "read", "update", "delete"], // Store-related permissions
+    store: ["create", "read", "update", "delete", "readAll"], // Store-related permissions
     user: ["read", "update", "delete", "readAll"], // User-related permissions (careful with delete!)
     admin: ["create", "read", "update", "delete", "readAll"], // Allow reading admin details
-    orderHistory: ["read"], // Allow reading order history
+    orderHistory: ["read", "readAll"], // Allow reading order history
     category: ["create", "read", "update", "delete"], // Category-related permissions
     wishlist: ["read", "update", "delete"], // Wishlist-related permissions
     review: ["create", "read", "update", "delete"], // Review-related permissions.
@@ -53,7 +53,9 @@ const rbac = new RBAC({
       "update_category",
       "delete_category",
       "delete_review",
-    ], // Admins have full access except two SuperAdmin permissions.
+      "readAll_orderHistory",
+      "readAll_store",
+    ], // Admins have full access except SuperAdmin permissions.
     seller: [
       "customer",
       "create_store",
@@ -64,7 +66,7 @@ const rbac = new RBAC({
       "update_product",
       "delete_product",
     ],
-    superAdmin: ["admin", "delete_admin", "update_admin", "readAll_admin"], // SuperAdmin inherits admin permissions in addition to 2 permissions.
+    superAdmin: ["admin", "delete_admin", "update_admin", "readAll_admin"], // SuperAdmins have full access.
   },
 });
 
