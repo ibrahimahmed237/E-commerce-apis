@@ -5,10 +5,10 @@ import asyncHandler from "express-async-handler";
 
 export default asyncHandler(async function (req, res, next) {
   if (!req.header("Authorization"))
-    return next(new Error("Unauthorized", 401));
+    return next(new appError("Unauthorized", 401));
 
   const token = req.header("Authorization").replace("Bearer ", "");
-  if (!token) return next(new Error("Unauthorized", 401));
+  if (!token) return next(new appError("Unauthorized", 401));
 
   const decoded = jsonwebtoken.verify(token, process.env.JWT_SECRET);
   if (!decoded) return next(new appError("Unauthorized", 401));
