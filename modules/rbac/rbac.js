@@ -1,44 +1,72 @@
 import { RBAC } from "rbac";
 
 const rbac = new RBAC({
-  roles: ["superAdmin", "admin", "seller", "customer"],
+  roles: ["superAdmin", "admin", "seller", "customer"], // Define roles
   permissions: {
-    order: ["create", "read", "update"],
-    product: ["create", "read", "update", "delete"],
-    store: ["create", "read", "update", "delete"],
-    user: ["create", "read", "update", "delete"], // User-related permissions (careful with delete!)
+    order: ["create", "read", "update"], // Order-related permissions
+    product: ["create", "read", "update", "delete"], // Product-related permissions
+    store: ["create", "read", "update", "delete"], // Store-related permissions
+    user: ["read", "update", "delete"], // User-related permissions (careful with delete!)
     admin: ["create", "read", "update", "delete"], // Allow reading admin details
     orderHistory: ["read"], // Allow reading order history
     category: ["create", "read", "update", "delete"], // Category-related permissions
     wishlist: ["read", "update", "delete"], // Wishlist-related permissions
-    review: ["create", "read", "update", "delete"], // Review-related permissions
-    cart: ["read", "update", "delete"], // Cart-related permissions
+    review: ["create", "read", "update", "delete"], // Review-related permissions.
+    cart: ["read", "update", "delete"], // Cart-related permissions.
   },
   grants: {
-    customer: ["order.*", "read_own_cart", "wishlist.*", "review.*", "cart.*"],
+    customer: [
+      "create_order",
+      "read_order",
+      "update_order",
+      "read_wishlist",
+      "update_wishlist",
+      "delete_wishlist",
+      "create_review",
+      "read_review",
+      "update_review",
+      "delete_review",
+      "read_cart",
+      "update_cart",
+      "delete_cart",
+      "read_store",
+      "read_product",
+      "read_category",
+      "read_orderHistory",
+      "read_user",
+    ], // Customers have limited access.
     admin: [
-      "order.*",
-      "product.*",
-      "store.*",
-      "user.*",
-      "orderHistory.read",
-      "category.*",
-      "wishlist.*",
-      "review.*",
-      "cart.*",
-    ], // Admins have full access
+      "customer",
+      "create_product",
+      "update_product",
+      "delete_product",
+      "create_store",
+      "read_store",
+      "update_store",
+      "delete_store",
+      "update_user",
+      "delete_user",
+      "create_admin",
+      "read_admin",
+      "create_category",
+      "update_category",
+      "delete_category",
+      "delete_review",
+    ], // Admins have full access except two SuperAdmin permissions.
     seller: [
       "customer",
-      "product.create",
-      "product.read_own",
-      "product.update_own",
-      "store.create",
-      "store.read",
-      "store.update",
-      "store.delete",
-    ], // Sellers can create/read own products, read all orders, and create/read their own orders.
-    superAdmin: ["admin", "admin.*"], // SuperAdmin inherits admin permissions.
+      "create_store",
+      "read_store",
+      "update_store",
+      "delete_store",
+      "create_product",
+      "update_product",
+      "delete_product",
+    ],
+    superAdmin: ["admin", "delete_admin", "update_admin"], // SuperAdmin inherits admin permissions in addition to 2 permissions.
   },
 });
 
-await rbac.init(); // Initialize RBAC system
+await rbac.init(); // Initialize RBAC system.
+
+export default rbac;

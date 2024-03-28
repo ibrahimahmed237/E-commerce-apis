@@ -39,7 +39,7 @@ const storeSchema = new mongoose.Schema({
     public_id: { type: String, required: true },
   },
   owner: {
-    type: Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
 });

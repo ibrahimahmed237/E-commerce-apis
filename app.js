@@ -7,6 +7,7 @@ import cors from "cors";
 import helmet from "helmet";
 import userRoutes from "./modules/user/routes/user.route.js";
 import authRoutes from "./modules/authentication/routes/auth.route.js";
+import storeRoutes from "./modules/store/routes/store.route.js";
 
 config();
 connectDB();
@@ -23,6 +24,8 @@ app.get("/", (req, res, next) => {
 
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
+app.use("/api/stores", storeRoutes);
+
 
 app.use(notFound);
 app.use(errorHandler);
