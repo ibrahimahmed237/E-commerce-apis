@@ -1,8 +1,12 @@
 import { Router } from "express";
+import { getWishlist, addProductToWishlist, removeProductFromWishlist } from "../controllers/wishlist.controller.js";
+import authentication from "../../../middlewares/authentication.js";
 
 const router = Router();
 
 // Auth
-router.get("/");
-router.post("/items/productId");
-router.delete("/items/productId");
+router.use(authentication);
+
+router.get("/", getWishlist);
+router.post("/items/productId", addProductToWishlist);
+router.delete("/items/productId", removeProductFromWishlist);
