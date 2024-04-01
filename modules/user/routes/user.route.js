@@ -6,6 +6,7 @@ import {
   resetPassword,
   forgotPassword,
   verifyPassOtp,
+  getUserData,
 } from "../controllers/user.controller.js";
 import { resetPasswordValidation } from "../validators/user.validation.js";
 import validator from "../../../validation/common.validation.js";
@@ -24,8 +25,7 @@ router.patch(
 );
 router.use(authentication);
 
-router.use(authorize("update", "user"));
-router.post("/location", getLocation);
+router.post("/set-location", getLocation);
 router.post("/upload-avatar", uploadSingle, uploadAvatar);
 router.patch(
   "/change-password",
@@ -33,10 +33,11 @@ router.patch(
   changePassword
 );
 
-router.get("/:userId");
+router.get("/:userId", getUserData);
 
-router.patch("/update-profile");
 
-router.delete("/delete-account");
+router.patch("/update-profile",);
+
+router.delete("/delete-account",);
 
 export default router;

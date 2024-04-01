@@ -10,6 +10,16 @@ import appError from "../../../utils/appError.js";
 import asyncHandler from "express-async-handler";
 import cloudinary from "../../../config/cloudinary.js";
 
+export const getUserData = asyncHandler(async function (req, res, next) {
+  const userId = req.params.userId || req.user._id;
+  const user = await getUser(userId);
+  res.status(200).json({ status: "success", user });
+});
+
+export const updateProfile = asyncHandler(async function (req, res, next) {
+  const user = await getUser(req.user._id);
+  
+});
 export const getLocation = asyncHandler(async function (req, res, next) {
   let user = getUser(req.user._id);
   const { longitude, latitude } = req.query || req.body;
@@ -18,7 +28,7 @@ export const getLocation = asyncHandler(async function (req, res, next) {
   user.location = location;
   user.location.longitude = longitude;
   user.location.latitude = latitude;
-  
+
   await user.save();
 
   res.status(200).json({ status: "success", location });
