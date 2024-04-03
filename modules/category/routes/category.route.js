@@ -1,8 +1,9 @@
 import { Router } from "express";
+import { getCategories } from "../controllers/category.controller.js";
 
 const router = Router();
 
-router.get("/",);
+router.get("/",getCategories);
 
 router.get("/:categoryId");
 
