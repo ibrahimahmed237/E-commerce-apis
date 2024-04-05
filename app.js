@@ -9,6 +9,7 @@ import userRoutes from "./modules/user/routes/user.route.js";
 import authRoutes from "./modules/authentication/routes/auth.route.js";
 import storeRoutes from "./modules/store/routes/store.route.js";
 import adminRoutes from "./modules/admin/routes/admin.route.js";
+import categoryRoutes from "./modules/category/routes/category.route.js";
 
 config();
 connectDB();
@@ -27,6 +28,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/stores", storeRoutes);
 app.use("/api/admins", adminRoutes);
+app.use("/api/categories", categoryRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

@@ -3,6 +3,8 @@ import mongoose from "mongoose";
 import asyncHandler from "express-async-handler";
 import appError from "../../../utils/appError.js";
 import { otpSending } from "../services/email.js";
+import dotenv from "dotenv";
+dotenv.config();
 
 export const getUser = asyncHandler(async function (input) {
     let query = [{ email: input }];
@@ -20,9 +22,9 @@ export const getUser = asyncHandler(async function (input) {
 
 export const createUser = asyncHandler(async function (user, next) {
   user.fullName = `${user.firstName} ${user.lastName}`;
+  console.log(user);
+  user = await User.create(user);
 
-  user = new User(user);
-  await user.save();
   if (!user) return next(new appError("User not created", 400));
 
   if (process.env.NODE_ENV !== "development") {

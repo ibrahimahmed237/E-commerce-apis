@@ -31,7 +31,6 @@ const rbac = new RBAC({
       "delete_cart",
       "read_store",
       "read_product",
-      "read_category",
       "read_orderHistory",
       "read_user",
     ], // Customers have limited access.

@@ -1,4 +1,4 @@
-import appError from "../../../utils/appError";
+import appError from "../../../utils/appError.js";
 import Category from "../models/Category.js";
 import asyncHandler from "express-async-handler";
 
@@ -26,7 +26,14 @@ export const getCategory = asyncHandler(async (categoryId, next) => {
 });
 
 export const create = asyncHandler(async (req, next) => {
-  const category = await Category.create(req.body);
-    
+  const { name, description } = req.body;
+  const category = await Category.create({ name, description });
+  if (!category) {
+    return next(new appError("Category not created", 400));
+  }
+
   return category;
 });
+
+const CategoryManager = { getCategories, getCategory, create };
+export default CategoryManager;

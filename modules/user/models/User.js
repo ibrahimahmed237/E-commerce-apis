@@ -51,8 +51,8 @@ const userSchema = new mongoose.Schema({
     type: String,
   },
   avatar: {
-    url: { type: String, required: true },
-    public_id: { type: String, required: true },
+    url: { type: String, default: null },
+    public_id: { type: String, default: null },
   },
   otp: { type: Number },
   passwordOtp: {
